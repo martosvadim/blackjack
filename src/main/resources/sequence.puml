@@ -1,0 +1,81 @@
+@startuml
+actor Blackjack
+
+== Start Round ==
+Blackjack -> GameTable: playRound()
+GameTable -> Dealer: shuffleDeck()
+Dealer -> Deck: shuffle()
+Deck -> Dealer
+Dealer -> GameTable
+
+== Deal Stage ==
+GameTable -> Dealer: deal(player1)
+Dealer -> Deck: nextCard()
+Deck -> Dealer: card
+Dealer -> Player1: offer(card)
+Player1 -> Dealer
+Dealer -> Card: flip()
+Card -> Dealer
+note left
+deals one more card to player1
+end note
+Dealer -> GameTable
+
+GameTable -> Dealer: deal(player2)
+note right
+deals 2 cards to player2
+and all other players as well
+end note
+Dealer -> GameTable
+
+GameTable -> Dealer: deal(dealer)
+note right
+deals to dealer himself,
+but do not flip the second card
+end note
+Dealer -> GameTable
+
+== Play Stage ==
+GameTable -> Player1: play(dealer)
+Player1 -> Dealer: askForACard()
+Dealer -> Player1: card
+Player1 -> Dealer: askForACard()
+Dealer -> Player1: card
+Player1 -> Player1: chooseAceValue()
+Player1 -> GameTable: stay()
+
+GameTable -> Player2: play(dealer)
+note right
+plays with player2
+and all other players as well
+end note
+Player2 -> GameTable
+
+GameTable -> Dealer: play(dealer)
+note right
+dealer plays with himself
+end note
+Dealer -> GameTable
+
+== Check Stage ==
+GameTable -> Player1: check(dealer)
+note right
+suppose player 1 wins
+end note
+Player1 -> Dealer: reduceMoney
+Dealer -> Player1
+Player1 -> Player1: doubleMoney
+Player1 -> GameTable
+
+GameTable -> Player2: check(dealer)
+note right
+suppose player 2 loose
+end note
+Player2 -> Dealer: increaseMoney
+Dealer -> Player2
+Player2 -> Player2: zeroMoney
+Player2 -> GameTable
+
+== Finish Round ==
+GameTable -> Blackjack
+@enduml

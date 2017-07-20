@@ -1,0 +1,51 @@
+@startuml
+class Card {
+    name: String
+    faceDown: boolean
+    value: int
+    value(): int
+    flip(): void
+    isAce(): boolean
+}
+
+class Deck {
+    cards: Collection<Card>
+    shuffle(): void
+    next(): card
+}
+
+interface Iterable
+
+class Player {
+    hand: Collection<Card>
+    money: int
+    offer(Card): void
+    play(Dealer): void
+    check(Dealer): void
+}
+
+class Dealer {
+    deck: Deck
+    shuffleDeck(): void
+    deal(Player): void
+    askForACard(Player): void
+}
+
+class GameTable {
+    dealer: Dealer
+    players: Collection<Player>
+    playRound(): void
+}
+
+class Blackjack
+
+Card "*" o-- "1" Deck
+Card "*" o-- "*" Player
+Deck "1" *-- "1" Dealer
+Player <|-- Dealer
+Player "*" o-- "1" GameTable
+Dealer "1" o-- "1" GameTable
+Iterable <|-- Deck
+GameTable <-- Blackjack
+
+@enduml
